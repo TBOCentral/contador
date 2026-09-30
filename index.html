@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contador TBO</title>
+<style>
+  :root{--verde:#183830;--verde-esc:#0e211c;--laranja:#e04800;--fundo:#f3efe4;--linha:#dfe0d6;--cinza:#6c7671}
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  body{background:var(--fundo);color:var(--verde);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4vmin;padding:4vmin;overflow:hidden}
+  .titulo{font-size:4vmin;font-weight:600;letter-spacing:.02em;text-align:center;color:var(--verde)}
+  .titulo::after{content:"";display:block;width:12vmin;height:.7vmin;background:var(--laranja);margin:1.6vmin auto 0;border-radius:1vmin}
+  .contador{display:flex;gap:2.5vmin;align-items:stretch;justify-content:center;width:100%}
+  .bloco{flex:1;max-width:22vw;background:var(--verde);color:#fff;border-radius:2vmin;padding:4vmin 1vmin 3vmin;
+    text-align:center;box-shadow:0 .6vmin 0 var(--verde-esc)}
+  .num{font-size:11vmin;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+  .bloco:last-child .num{color:var(--laranja)}
+  .rot{margin-top:2vmin;font-size:2.4vmin;letter-spacing:.18em;text-transform:uppercase;color:#cfdad4}
+  .fim{display:none;font-size:7vmin;font-weight:700;color:var(--laranja);text-align:center}
+  .rodape{font-size:2.2vmin;color:var(--cinza);letter-spacing:.12em;text-transform:uppercase}
+  @media (max-aspect-ratio:1/1){.num{font-size:9vw}.rot{font-size:2.4vw}.titulo{font-size:4.5vw}.bloco{max-width:none}}
+</style>
+</head>
+<body>
+<!--
+  Como mudar a data: acrescente ao endereço  ?data=2026-12-31T09:00
+-->
+<div class="contador" id="contador">
+  <div class="bloco"><div class="num" id="d">00</div><div class="rot">Dias</div></div>
+  <div class="bloco"><div class="num" id="h">00</div><div class="rot">Horas</div></div>
+  <div class="bloco"><div class="num" id="m">00</div><div class="rot">Minutos</div></div>
+  <div class="bloco"><div class="num" id="s">00</div><div class="rot">Segundos</div></div>
+</div>
+<div class="fim" id="fim">Chegou o dia!</div>
+<script>
+  var q=new URLSearchParams(location.search);
+  var alvo=new Date(q.get('data')||'2027-01-01T00:00:00');
+  function p(n){return String(n).padStart(2,'0')}
+  function tick(){
+    var t=Math.max(0,Math.floor((alvo-new Date())/1000));
+    d.textContent=p(Math.floor(t/86400));
+    h.textContent=p(Math.floor(t%86400/3600));
+    m.textContent=p(Math.floor(t%3600/60));
+    s.textContent=p(t%60);
+    if(t===0&&!isNaN(alvo)){contador.style.display='none';fim.style.display='block'}
+  }
+  tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
